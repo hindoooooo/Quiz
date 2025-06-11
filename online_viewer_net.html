@@ -1,0 +1,627 @@
+Put your HTML text
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Logiciels de Gestion de Projet Marketing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            width: 95%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            color: #4a5568;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .question-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .question-number {
+            color: #4facfe;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .option.correct {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border-color: #48bb78;
+        }
+
+        .option.incorrect {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            border-color: #f56565;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .score-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .performance-level {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .explanation {
+            background: #edf2f7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .explanation-title {
+            color: #4facfe;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .explanation-text {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-title {
+            font-size: 32px;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+
+        .start-description {
+            font-size: 18px;
+            color: #718096;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .quiz-info {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .quiz-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .quiz-info-label {
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .quiz-info-value {
+            color: #718096;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <!-- Écran de démarrage -->
+        <div id="startScreen" class="start-screen">
+            <div class="header">
+                <h1 class="start-title">📊 Quiz Logiciels de Gestion de Projet Marketing</h1>
+                <p class="start-description">Testez vos connaissances sur les meilleurs outils de gestion de projet marketing et découvrez la solution adaptée à vos besoins !</p>
+            </div>
+
+            <div class="quiz-info">
+                <div class="quiz-info-item">
+                    <span class="quiz-info-label">Nombre de questions :</span>
+                    <span class="quiz-info-value">12 questions</span>
+                </div>
+                <div class="quiz-info-item">
+                    <span class="quiz-info-label">Durée estimée :</span>
+                    <span class="quiz-info-value">6-8 minutes</span>
+                </div>
+                <div class="quiz-info-item">
+                    <span class="quiz-info-label">Sujet :</span>
+                    <span class="quiz-info-value">Outils de gestion de projet marketing</span>
+                </div>
+                <div class="quiz-info-item">
+                    <span class="quiz-info-label">Niveau de difficulté :</span>
+                    <span class="quiz-info-value">Intermédiaire</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="startQuiz()">
+                <span class="emoji">🚀</span>
+                Commencer le Quiz
+            </button>
+        </div>
+
+        <!-- Écran du quiz -->
+        <div id="quizScreen" class="hidden">
+            <div class="header">
+                <h1 class="title">📊 Quiz Logiciels de Gestion de Projet Marketing</h1>
+                <p class="subtitle">Testez vos connaissances et trouvez l'outil parfait !</p>
+            </div>
+
+            <div class="progress-container">
+                <span class="progress-text" id="progressText">Question 1 sur 12</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="scoreText">Score : 0</span>
+            </div>
+
+            <div id="questionContainer">
+                <!-- Les questions apparaîtront ici -->
+            </div>
+
+            <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>
+                Question suivante
+                <span class="emoji">⏭️</span>
+            </button>
+        </div>
+
+        <!-- Écran des résultats -->
+        <div id="resultScreen" class="hidden">
+            <div class="score-display">
+                <div class="score-number" id="finalScore">0</div>
+                <div class="score-text">points sur 120 points</div>
+                <div class="performance-level" id="performanceLevel"></div>
+            </div>
+
+            <div id="recommendation" class="explanation">
+                <div class="explanation-title">🎯 Recommandation personnalisée :</div>
+                <div class="explanation-text" id="recommendationText"></div>
+            </div>
+
+            <button class="btn" onclick="restartQuiz()">
+                <span class="emoji">🔄</span>
+                Recommencer le Quiz
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswers = [];
+        let showingAnswer = false;
+
+        const questions = [{
+                question: "Quel est le principal défi de la gestion de projet marketing sans outils adaptés ?",
+                options: [
+                    "La coordination entre équipes multidisciplinaires",
+                    "Le manque de créativité uniquement",
+                    "Les coûts élevés seulement",
+                    "L'absence de clients"
+                ],
+                correct: 0,
+                explanation: "La coordination entre équipes multidisciplinaires est le défi majeur, impactant l'efficacité, la qualité et le respect des délais."
+            },
+            {
+                question: "Quelle fonctionnalité est essentielle dans un logiciel de gestion de projet marketing ?",
+                options: [
+                    "Design attractif de l'interface uniquement",
+                    "Prix bas seulement",
+                    "Calendrier éditorial et gestion des tâches",
+                    "Nombre illimité d'utilisateurs"
+                ],
+                correct: 2,
+                explanation: "Le calendrier éditorial et la gestion des tâches sont fondamentaux pour planifier et suivre les campagnes marketing efficacement."
+            },
+            {
+                question: "Quel logiciel est le plus adapté aux PME et startups ?",
+                options: [
+                    "Solutions complexes et coûteuses",
+                    "Asana - Interface intuitive et version gratuite",
+                    "Aucun outil spécialisé",
+                    "Excel uniquement"
+                ],
+                correct: 1,
+                explanation: "Asana offre une interface intuitive et une version gratuite jusqu'à 15 utilisateurs, idéale pour les petites équipes en croissance."
+            },
+            {
+                question: "Quel outil se distingue par ses tableaux personnalisables et ses automatisations avancées ?",
+                options: [
+                    "CoSchedule",
+                    "Monday.com",
+                    "Notion",
+                    "Wrike"
+                ],
+                correct: 1,
+                explanation: "Monday.com est reconnu pour ses tableaux très flexibles et ses capacités d'automatisation avancées des workflows."
+            },
+            {
+                question: "Quel logiciel est spécialisé dans la planification de contenu et les réseaux sociaux ?",
+                options: [
+                    "Asana",
+                    "Smartsheet",
+                    "CoSchedule",
+                    "Notion"
+                ],
+                correct: 2,
+                explanation: "CoSchedule est spécialement conçu pour le marketing avec un calendrier éditorial intégré et la gestion native des réseaux sociaux."
+            },
+            {
+                question: "Quel outil offre les meilleures fonctionnalités de gestion des ressources et de reporting ?",
+                options: [
+                    "Asana",
+                    "Wrike",
+                    "Monday.com",
+                    "Notion"
+                ],
+                correct: 1,
+                explanation: "Wrike excelle dans la gestion avancée des ressources, les workflows d'approbation et les capacités de reporting sophistiquées."
+            },
+            {
+                question: "Quel est le gain de temps moyen attendu avec un outil de gestion de projet ?",
+                options: [
+                    "5-10%",
+                    "20-30%",
+                    "50-60%",
+                    "Aucun gain"
+                ],
+                correct: 1,
+                explanation: "Les études montrent une réduction de 20-30% du temps de coordination grâce aux outils de gestion de projet adaptés."
+            },
+            {
+                question: "Quelle est la meilleure pratique pour choisir un logiciel de gestion de projet ?",
+                options: [
+                    "Choisir le plus cher automatiquement",
+                    "Tester gratuitement et impliquer l'équipe",
+                    "Suivre la popularité uniquement",
+                    "Acheter sans essayer"
+                ],
+                correct: 1,
+                explanation: "Les essais gratuits et l'implication de l'équipe garantissent le choix d'un outil adapté aux besoins réels de l'organisation."
+            },
+            {
+                question: "Quel logiciel combine le mieux gestion de projet et documentation collaborative ?",
+                options: [
+                    "Asana",
+                    "CoSchedule",
+                    "Notion",
+                    "Monday.com"
+                ],
+                correct: 2,
+                explanation: "Notion se distingue comme workspace tout-en-un, intégrant gestion de projet, bases de données et documentation collaborative."
+            },
+            {
+                question: "Quelle est la première étape cruciale pour implémenter un outil de gestion de projet ?",
+                options: [
+                    "Acheter la version premium immédiatement",
+                    "Former toute l'équipe en une journée",
+                    "Analyser les processus actuels et définir les objectifs",
+                    "Copier la méthode d'une autre entreprise"
+                ],
+                correct: 2,
+                explanation: "L'audit des processus existants et la définition d'objectifs clairs sont essentiels pour une implémentation réussie."
+            },
+            {
+                question: "Quel critère est le plus important pour l'adoption réussie d'un outil ?",
+                options: [
+                    "Le nombre de fonctionnalités disponibles",
+                    "La facilité d'usage et l'adhésion de l'équipe",
+                    "Le prix le plus bas",
+                    "La notoriété de la marque"
+                ],
+                correct: 1,
+                explanation: "La facilité d'usage et l'adhésion de l'équipe sont déterminantes pour le succès de l'implémentation et l'adoption durable."
+            },
+            {
+                question: "Quel bénéfice qualitatif est le plus significatif avec un bon outil de gestion de projet ?",
+                options: [
+                    "Réduction des coûts uniquement",
+                    "Amélioration de la visibilité et communication",
+                    "Augmentation du nombre de projets",
+                    "Élimination complète des réunions"
+                ],
+                correct: 1,
+                explanation: "L'amélioration de la visibilité sur les projets et de la communication équipe constitue le bénéfice qualitatif le plus impactant."
+            }
+        ];
+
+        function startQuiz() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            const container = document.getElementById('questionContainer');
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Question ${currentQuestion + 1} sur ${questions.length}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})" data-index="${index}">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            updateProgress();
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').innerHTML = currentQuestion === questions.length - 1 ?
+                'Voir les résultats <span class="emoji">🏆</span>' :
+                'Question suivante <span class="emoji">⏭️</span>';
+            showingAnswer = false;
+        }
+
+        function selectOption(selectedIndex) {
+            if (showingAnswer) return;
+
+            const options = document.querySelectorAll('.option');
+            const question = questions[currentQuestion];
+
+            // Retirer la sélection précédente
+            options.forEach(option => option.classList.remove('selected'));
+
+            // Sélectionner la nouvelle option
+            options[selectedIndex].classList.add('selected');
+            selectedAnswers[currentQuestion] = selectedIndex;
+
+            // Afficher la bonne réponse
+            setTimeout(() => {
+                options.forEach((option, index) => {
+                    if (index === question.correct) {
+                        option.classList.add('correct');
+                    } else if (index === selectedIndex && selectedIndex !== question.correct) {
+                        option.classList.add('incorrect');
+                    }
+                });
+
+                // Ajouter l'explication
+                const explanation = document.createElement('div');
+                explanation.className = 'explanation';
+                explanation.innerHTML = `
+                    <div class="explanation-title">💡 Explication :</div>
+                    <div class="explanation-text">${question.explanation}</div>
+                `;
+                document.querySelector('.question-card').appendChild(explanation);
+
+                // Mettre à jour le score
+                if (selectedIndex === question.correct) {
+                    score += 10;
+                    updateScore();
+                }
+
+                showingAnswer = true;
+                document.getElementById('nextBtn').disabled = false;
+            }, 500);
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+
+            document.getElementById('finalScore').textContent = score;
+
+            let performanceText = '';
+            let recommendationText = '';
+
+            if (score >= 100) {
+                performanceText = '🌟 Excellent ! Vous êtes expert en gestion de projet marketing';
+                recommendationText = 'Votre expertise est remarquable ! Optez pour Wrike ou Monday.com pour exploiter pleinement les fonctionnalités avancées et mener vos équipes vers l\'excellence opérationnelle.';
+            } else if (score >= 80) {
+                performanceText = '👍 Très bien ! Vous maîtrisez bien le sujet';
+                recommendationText = 'Solide connaissance ! Asana ou Monday.com seraient parfaits pour équilibrer facilité d\'usage et puissance fonctionnelle dans vos projets marketing.';
+            } else if (score >= 60) {
+                performanceText = '📚 Bien, mais perfectible avec un peu d\'apprentissage';
+                recommendationText = 'Bonne base ! Commencez par Asana pour sa simplicité, puis investissez dans la formation pour développer vos compétences en gestion de projet.';
+            } else {
+                performanceText = '💪 Débutez votre parcours d\'apprentissage !';
+                recommendationText = 'Pas d\'inquiétude ! Commencez avec Asana (version gratuite) et profitez des ressources de formation disponibles pour construire des bases solides.';
+            }
+
+            document.getElementById('performanceLevel').textContent = performanceText;
+            document.getElementById('recommendationText').textContent = recommendationText;
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} sur ${questions.length}`;
+        }
+
+        function updateScore() {
+            document.getElementById('scoreText').textContent = `Score : ${score}`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswers = [];
+            showingAnswer = false;
+
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+
+            updateScore();
+        }
+    </script>
+</body>
+
+</html>
